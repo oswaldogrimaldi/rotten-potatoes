@@ -23,7 +23,7 @@ jobs:
     - name: Docker Build and Push
       uses: docker/build-push-action@v2.8.0
       with:
-        context: ./src
+        context: ./home/oswaldo/Documentos/K8S/DO/rotten-potatoes/src/
         file: ./src/Docker/File
         push: true
         tags: |
