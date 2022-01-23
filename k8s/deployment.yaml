@@ -1,10 +1,12 @@
+#Deployment do MongoDB
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mongodb
 spec:
   selector:
-    matchLabels:
+    matchLabels: 
       app: mongodb
   template:
     metadata:
@@ -13,7 +15,7 @@ spec:
     spec:
       containers:
         - name: mongodb
-          image: mongo:4.4.6
+          image: mongo:4.0
           ports:
             - containerPort: 27017
           env:
@@ -22,56 +24,60 @@ spec:
             - name: MONGO_INITDB_ROOT_PASSWORD
               value: mongopwd
 ---
+#Serviço do MongoDB
+
 apiVersion: v1
 kind: Service
 metadata:
-  name: mongodb-service
+  name: mongodb
 spec:
   selector:
     app: mongodb
   ports:
     - port: 27017
-      targetPort: 27017
   type: ClusterIP
 ---
+#Deployment da pagina da aplicação web rotten-potatoes
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: movies
+  name: web
 spec:
   selector:
-    matchLabels:
-      app: movies
+    matchLabels: 
+      app: web
   template:
     metadata:
       labels:
-        app: movies
+        app: web
     spec:
       containers:
-      - name: movies
-        image: fabricioveronez/rotten-potatoes:v1
+      - name: web
+        image: oswaldogrimaldi/rotten-potatoes:v2
         ports:
-          - containerPort: 5000
+        - containerPort: 5000
         env:
-          - name: MONGODB_DB
-            value: admin
-          - name: MONGODB_HOST
-            value: mongodb-service  
-          - name: MONGODB_PORT
-            value: "27017"
-          - name: MONGODB_USERNAME
-            value: mongouser
-          - name: MONGODB_PASSWORD
-            value: mongopwd
+        - name: MONGODB_DB
+          value: admin
+        - name: MONGODB_HOST
+          value: mongodb
+        - name: MONGODB_PORT
+          value: "27017"
+        - name: MONGODB_USERNAME
+          value: mongouser
+        - name: MONGODB_PASSWORD
+          value: mongopwd
 ---
+#Service da pagina da aplicação web rotten-tomatoes
 apiVersion: v1
 kind: Service
 metadata:
-  name: movies
+  name: web
 spec:
   selector:
-    app: movies
-  ports:
+    app: web
+  ports: 
   - port: 80
     targetPort: 5000
     nodePort: 30000
