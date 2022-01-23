@@ -33,12 +33,12 @@ jobs:
  CD:
   runs-on: ubuntu-latest   
   
-   steps:
+  steps:
     - uses: actions/checkout@v2
     
     - name: Kubernetes Set Context
       uses: Azure/k8s-set-context@v2
       with:
-         method: kubeconfig
-         kubeconfig: $ {{ secrets.K8S_KUBECONFIG }}
+        method: kubeconfig
+        kubeconfig: $ {{ secrets.K8S_KUBECONFIG }}
             
